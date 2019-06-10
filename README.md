@@ -10,7 +10,7 @@ The response is an RSS 2.0 formatted response
 1. A [Percipio Service Account](https://documentation.skillsoft.com/en_us/pes/3_services/service_accounts/pes_service_accounts.htm) with permission for accessing [CONTENT DISCOVERY API](https://documentation.skillsoft.com/en_us/pes/2_understanding_percipio/rest_api/pes_rest_api.htm)
 
 ## Configuration
-Once you have copied this reporsitory set the following NODE ENV variables:
+Once you have copied this repository set the following NODE ENV variables:
 
 | ENV | Derscription |
 | --- | --- |
