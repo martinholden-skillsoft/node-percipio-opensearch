@@ -5,7 +5,7 @@ The response is an RSS 2.0 formatted response
 
 ## Requirements
 
-1. A publically accessible server running node.js (or abilty to reverse proxy back to your node server) - for testing you can use [ngrok](https://ngrok.com/)
+1. A publically accessible server running node.js (or ability to reverse proxy back to your node server) - for testing you can use [ngrok](https://ngrok.com/)
 1. A Skillsoft [Percipio](https://www.skillsoft.com/platform-solution/percipio/) Site
 1. A [Percipio Service Account](https://documentation.skillsoft.com/en_us/pes/3_services/service_accounts/pes_service_accounts.htm) with permission for accessing [CONTENT DISCOVERY API](https://documentation.skillsoft.com/en_us/pes/2_understanding_percipio/rest_api/pes_rest_api.htm)
 
