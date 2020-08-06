@@ -1,6 +1,6 @@
 {
 	"name": "node-percipio-opensearch",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Express app to generate OpenSearch response for federated search",
 	"main": "start.js",
 	"scripts": {
