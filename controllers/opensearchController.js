@@ -3,10 +3,10 @@ const axios = require('axios');
 const _ = require('lodash');
 const RSS = require('rss');
 
-const orgid = process.env.CUSTOMER_ORGID || null;
-const bearer = process.env.CUSTOMER_BEARER || null;
+const orgid = process.env.ORGID || null;
+const bearer = process.env.BEARER || null;
 const percipioSite = process.env.PERCIPIOSITE || null;
-const maxItems = process.env.MAX_ITEMS || 20;
+const maxItems = process.env.MAXITEMS || 20;
 
 /**
  * Call the Percipio /content-discovery/v1/organizations/${orgid}/search-content
@@ -14,13 +14,13 @@ const maxItems = process.env.MAX_ITEMS || 20;
  * @param {object} request
  * @returns {object} Axios promise
  */
-const getSearchResults = async request => {
+const getSearchResults = async (request) => {
   let requestParams = request || {};
 
   const requestDefaults = {
     max: 20,
     offset: 0,
-    q: request.searchTerms
+    q: request.searchTerms,
   };
 
   // merge opt with default config
@@ -32,10 +32,10 @@ const getSearchResults = async request => {
   const axiosConfig = {
     url: `https://api.percipio.com/content-discovery/v1/organizations/${orgid}/search-content`,
     headers: {
-      Authorization: `Bearer ${bearer}`
+      Authorization: `Bearer ${bearer}`,
     },
     method: 'GET',
-    params: requestParams
+    params: requestParams,
   };
 
   return axios.request(axiosConfig);
@@ -47,14 +47,14 @@ const getSearchResults = async request => {
  * @param {object} percipioItem - The Percipio Item from the Content Discovery response
  * @returns {string}
  */
-const getPercipioItemHTML = percipioItem => {
+const getPercipioItemHTML = (percipioItem) => {
   let courseInfo = null;
   if (!_.isNull(percipioItem.associations.parent)) {
     courseInfo = [
       '<span>From course: </span>',
       '<ul>',
       `<li class="itemCourseInfoLink"><a href="${percipioItem.associations.parent.link}" target="_blank">${percipioItem.associations.parent.title}</a></li>`,
-      '</ul>'
+      '</ul>',
     ].join('');
   }
 
@@ -65,7 +65,7 @@ const getPercipioItemHTML = percipioItem => {
   ) {
     const channelInfoArray = ['<span>From channel: </span>', '<ul>'];
 
-    _.forEach(percipioItem.associations.channels, channelValue => {
+    _.forEach(percipioItem.associations.channels, (channelValue) => {
       channelInfoArray.push(
         `<li class="itemChannelInfoLink"><a href="${channelValue.link}" class="card-link" target="_blank">${channelValue.title}</a></li>`
       );
@@ -93,7 +93,7 @@ const getPercipioItemHTML = percipioItem => {
     '</div>',
     '<div class="itemChannelInfo">',
     `${!_.isNull(channelInfo) ? channelInfo : ''}`,
-    '</div>'
+    '</div>',
   ].join('');
 
   return htmlDescription;
@@ -116,7 +116,7 @@ const opensearchViewAsync = asyncHandler(async (req, res) => {
   const request = {
     max: count,
     offset: startindex,
-    q: searchterms
+    q: searchterms,
   };
 
   let data = null;
@@ -139,7 +139,7 @@ const opensearchViewAsync = asyncHandler(async (req, res) => {
     ttl: '60',
     custom_namespaces: {
       opensearch: 'http://a9.com/-/spec/opensearch/1.1/',
-      media: 'http://search.yahoo.com/mrss/'
+      media: 'http://search.yahoo.com/mrss/',
     },
     custom_elements: [
       { 'opensearch:totalResults': totalRecords },
@@ -149,37 +149,37 @@ const opensearchViewAsync = asyncHandler(async (req, res) => {
         'opensearch:Query': [
           {
             _attr: {
-              role: 'request'
-            }
+              role: 'request',
+            },
           },
           {
             _attr: {
-              searchTerms: searchterms
-            }
+              searchTerms: searchterms,
+            },
           },
           {
             _attr: {
-              startindex
-            }
+              startindex,
+            },
           },
           {
             _attr: {
-              count
-            }
-          }
-        ]
-      }
-    ]
+              count,
+            },
+          },
+        ],
+      },
+    ],
   });
 
   if (!_.isNull(diagnostics)) {
     feed.item({
       title: 'dia',
       description: JSON.stringify(req.query),
-      url: `${req.protocol}://${req.get('host')}${req.originalUrl}`
+      url: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
     });
   }
-  _.forEach(data, value => {
+  _.forEach(data, (value) => {
     feed.item({
       title: `${value.contentType.displayLabel} | ${value.localizedMetadata[0].title}`,
       description: getPercipioItemHTML(value),
@@ -190,13 +190,13 @@ const opensearchViewAsync = asyncHandler(async (req, res) => {
           'media:thumbnail': [
             {
               _attr: {
-                url: value.imageUrl
-              }
-            }
-          ]
-        }
+                url: value.imageUrl,
+              },
+            },
+          ],
+        },
       ],
-      categories: [value.contentType.displayLabel]
+      categories: [value.contentType.displayLabel],
     });
   });
 
@@ -204,5 +204,5 @@ const opensearchViewAsync = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  opensearchViewAsync
+  opensearchViewAsync,
 };
